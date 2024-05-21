@@ -1,2 +1,2 @@
 # ChessEngine
-This Chess engine is my first Java application for university project.
+This chess engine is my first Java application for university project.
