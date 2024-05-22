@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Objects;
 
 public class Piece {
 
@@ -18,7 +19,7 @@ public class Piece {
     BufferedImage sheet;
     {
         try {
-            sheet = ImageIO.read(ClassLoader.getSystemResourceAsStream("res/chessPieces.png"));
+            sheet = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("res/chessPieces.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }

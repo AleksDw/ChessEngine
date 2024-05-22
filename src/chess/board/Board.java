@@ -14,9 +14,54 @@ public class Board extends JPanel {
 
     ArrayList<Piece> pieceList = new ArrayList<>();
 
+    public Piece selectedPiece;
+
+    Input input = new Input(this);
+
     public Board() {
         this.setPreferredSize(new Dimension(COLUMNS * tileSize, ROWS * tileSize));
         addPieces();
+
+        this.addMouseListener(input);
+        this.addMouseMotionListener(input);
+    }
+
+
+    public Piece getPiece(int col, int row) {
+
+        for(Piece piece : pieceList) {
+            if(piece.col == col && piece.row == row)
+                return piece;
+        }
+        return null;
+    }
+
+    public void makeMove(Move move) {
+
+        move.piece.col = move.newColumn;
+        move.piece.row = move.newRow;
+
+        move.piece.xPos = move.newColumn * tileSize;
+        move.piece.yPos = move.newRow * tileSize;
+
+        capture(move);
+    }
+
+    public void capture(Move move) {
+        pieceList.remove(move.capture);
+    }
+
+    public boolean isValidMove(Move move) { //TODO: check if king is pinned
+        if(sameTeam(move.piece, move.capture))
+            return false;
+        return true;
+    }
+
+    public boolean sameTeam(Piece p1, Piece p2) {
+        if(p1 == null || p2 == null) {
+            return false;
+        }
+        return p1.isWhite == p2.isWhite;
     }
 
     public void addPieces() {
