@@ -13,7 +13,6 @@ public class Board extends JPanel {
     int ROWS = 8;
 
     ArrayList<Piece> pieceList = new ArrayList<>();
-
     public Piece selectedPiece;
 
     Input input = new Input(this);
@@ -53,6 +52,10 @@ public class Board extends JPanel {
 
     public boolean isValidMove(Move move) { //TODO: check if king is pinned
         if(sameTeam(move.piece, move.capture))
+            return false;
+        if(!move.piece.isValidMovement(move.newColumn, move.newRow))
+            return false;
+        if(move.piece.moveCollideWithPiece(move.newColumn, move.newRow))
             return false;
         return true;
     }
@@ -95,7 +98,9 @@ public class Board extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
+        float dotSize = 0.125F;
 
+        // paint board
         for (int row = 0; row<ROWS; row++){
             for(int column = 0; column<COLUMNS; column++) {
                 g2d.setColor((column+row) % 2 == 0 ? Color.lightGray : Color.darkGray);
@@ -103,9 +108,25 @@ public class Board extends JPanel {
             }
         }
 
-
+        // paints pieces
         for(Piece piece : pieceList) {
             piece.paint(g2d);
+        }
+
+        // highlight all possible moves of a piece
+        if (selectedPiece != null) {
+            for (int row = 0; row<ROWS; row++){
+                for(int column = 0; column<COLUMNS; column++){
+
+                    if (isValidMove(new Move(this, selectedPiece, column, row))) {
+
+                        g2d.setColor(new Color(70, 180, 60, 200));
+                        g2d.fillOval((int) ((column+0.5-(dotSize/2)) * tileSize), (int) ((row+0.5-(dotSize/2)) * tileSize), (int) (dotSize*tileSize), (int) (dotSize*tileSize));
+
+                    }
+
+                }
+            }
         }
     }
 }

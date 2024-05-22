@@ -17,4 +17,14 @@ public class King extends Piece{
 
         this.sprite = sheet.getSubimage(0 * sheetScale, isWhite ? 0 : sheetScale, sheetScale, sheetScale).getScaledInstance(board.tileSize, board.tileSize, BufferedImage.SCALE_SMOOTH);
     }
+
+    @Override
+    public boolean isValidMovement(int col, int row) { // TODO: Check, King pinned, Checkmate, Stalemate, Castling
+        return (Math.abs(this.col - col) == 1 || Math.abs(this.col - col) == 0) && (Math.abs(this.row - row) == 1 || Math.abs(this.row - row) ==  0);
+    }
+
+    @Override
+    public boolean moveCollideWithPiece(int col, int row) {
+        return false;
+    }
 }
