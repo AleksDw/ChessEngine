@@ -57,33 +57,34 @@ public class Queen extends Piece{
                 }
         }
         else {
-            // up-left
-            if (this.col > col && this.row > row)
-                for (int i = 1; i < Math.abs(this.col - col); i++) {
-                    if (board.getPiece(this.col - i, this.row - i) != null)
-                        return true;
-                }
-
-            // up-right
-            if (this.col < col && this.row > row)
-                for (int i = 1; i < Math.abs(this.col - col); i++) {
-                    if (board.getPiece(this.col + i, this.row - i) != null)
-                        return true;
-                }
-
-            // down-left
-            if (this.col > col && this.row < row)
-                for (int i = 1; i < Math.abs(this.col - col); i++) {
-                    if (board.getPiece(this.col - i, this.row + i) != null)
-                        return true;
-                }
-
-            // down-right
-            if (this.col < col && this.row < row)
-                for (int i = 1; i < Math.abs(this.col - col); i++) {
-                    if (board.getPiece(this.col + i, this.row + i) != null)
-                        return true;
-                }
+            //up
+            if(this.row > row) {
+                //left
+                if (this.col > col)
+                    for(int i = 1; i < Math.abs(this.col - col); i++) {
+                        if(board.getPiece(this.col - i, this.row - i) != null)
+                            return true;
+                    }
+                else // right
+                    for(int i = 1; i < Math.abs(this.col - col); i++) {
+                        if(board.getPiece(this.col + i, this.row - i) != null)
+                            return true;
+                    }
+            }
+            //down
+            if(this.row < row) {
+                //left
+                if (this.col > col)
+                    for(int i = 1; i < Math.abs(this.col - col); i++) {
+                        if(board.getPiece(this.col - i, this.row + i) != null)
+                            return true;
+                    }
+                else // right
+                    for(int i = 1; i < Math.abs(this.col - col); i++) {
+                        if(board.getPiece(this.col + i, this.row + i) != null)
+                            return true;
+                    }
+            }
         }
 
         return false;
