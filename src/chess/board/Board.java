@@ -9,11 +9,13 @@ import java.util.ArrayList;
 public class Board extends JPanel {
 
     public int tileSize = 80;
-    int COLUMNS = 8;
-    int ROWS = 8;
+    final int COLUMNS = 8;
+    final int ROWS = 8;
 
     ArrayList<Piece> pieceList = new ArrayList<>();
     public Piece selectedPiece;
+
+    public int enPassaintTile = -1;
 
     Input input = new Input(this);
 
@@ -37,17 +39,46 @@ public class Board extends JPanel {
 
     public void makeMove(Move move) {
 
+        if(move.piece.name.equals("Pawn"))
+            movePawn(move);
+
         move.piece.col = move.newColumn;
         move.piece.row = move.newRow;
-
         move.piece.xPos = move.newColumn * tileSize;
         move.piece.yPos = move.newRow * tileSize;
 
-        capture(move);
+        capture(move.capture);
     }
 
-    public void capture(Move move) {
-        pieceList.remove(move.capture);
+    private void movePawn(Move move) {
+
+        //en passaint
+        int colorMove = move.piece.isWhite ? 1 : -1;
+
+        if(getTileNum(move.newColumn, move.newRow) == enPassaintTile) {
+            move.capture = getPiece(move.newColumn, move.newRow + colorMove);
+        }
+        if(Math.abs(move.piece.row - move.newRow) == 2) {
+            enPassaintTile = getTileNum(move.newColumn, move.newRow + colorMove);
+        }
+        else {
+            enPassaintTile = -1;
+        }
+
+        //promotion
+        colorMove = move.piece.isWhite ? 0 : 7;
+        if(move.newRow == colorMove) {
+            promotePawn(move);
+        }
+    }
+
+    private void  promotePawn(Move move) {
+        pieceList.add(new Queen(this, move.newColumn, move.newRow, move.piece.isWhite));
+        capture(move.piece);
+    }
+
+    public void capture(Piece piece) {
+        pieceList.remove(piece);
     }
 
     public boolean isValidMove(Move move) { //TODO: check if king is pinned
@@ -65,6 +96,10 @@ public class Board extends JPanel {
             return false;
         }
         return p1.isWhite == p2.isWhite;
+    }
+
+    public int getTileNum(int col, int row) {
+        return row * ROWS + col;
     }
 
     public void addPieces() {
