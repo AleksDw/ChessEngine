@@ -19,6 +19,8 @@ public class Board extends JPanel {
 
     Input input = new Input(this);
 
+    CheckScanner checkScanner = new CheckScanner(this);
+
     public Board() {
         this.setPreferredSize(new Dimension(COLUMNS * tileSize, ROWS * tileSize));
         addPieces();
@@ -88,6 +90,8 @@ public class Board extends JPanel {
             return false;
         if(move.piece.moveCollideWithPiece(move.newColumn, move.newRow))
             return false;
+        if (checkScanner.isKingChecked(move))
+            return false;
         return true;
     }
 
@@ -100,6 +104,15 @@ public class Board extends JPanel {
 
     public int getTileNum(int col, int row) {
         return row * ROWS + col;
+    }
+
+    Piece findKing(boolean isWhite) {
+        for(Piece piece : pieceList) {
+            if (isWhite == piece.isWhite && piece.name.equals("King")) {
+                return piece;
+            }
+        }
+        return null;
     }
 
     public void addPieces() {
