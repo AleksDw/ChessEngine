@@ -15,6 +15,7 @@ public abstract class Piece {
 
     public boolean isWhite;
     public String name;
+    public boolean isFirstMove = true;
 
     BufferedImage sheet;
     {

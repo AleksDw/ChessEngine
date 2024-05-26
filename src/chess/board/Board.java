@@ -19,7 +19,7 @@ public class Board extends JPanel {
 
     Input input = new Input(this);
 
-    CheckScanner checkScanner = new CheckScanner(this);
+    public CheckScanner checkScanner = new CheckScanner(this);
 
     public Board() {
         this.setPreferredSize(new Dimension(COLUMNS * tileSize, ROWS * tileSize));
@@ -43,13 +43,31 @@ public class Board extends JPanel {
 
         if(move.piece.name.equals("Pawn"))
             movePawn(move);
-
+        if (move.piece.name.equals("King"))
+            moveKing(move);
         move.piece.col = move.newColumn;
         move.piece.row = move.newRow;
         move.piece.xPos = move.newColumn * tileSize;
         move.piece.yPos = move.newRow * tileSize;
 
+        move.piece.isFirstMove = false;
         capture(move.capture);
+
+    }
+
+    private void moveKing(Move move) {
+        if (Math.abs(move.piece.col- move.newColumn) == 2) {
+            Piece rook;
+            if(move.piece.col < move.newColumn) {
+                rook = getPiece(7, move.piece.row);
+                rook.col = 5;
+            }
+            else {
+                rook = getPiece(0, move.piece.row);
+                rook.col = 3;
+            }
+            rook.xPos = rook.col * tileSize;
+        }
     }
 
     private void movePawn(Move move) {
@@ -83,7 +101,7 @@ public class Board extends JPanel {
         pieceList.remove(piece);
     }
 
-    public boolean isValidMove(Move move) { //TODO: check if king is pinned
+    public boolean isValidMove(Move move) {
         if(sameTeam(move.piece, move.capture))
             return false;
         if(!move.piece.isValidMovement(move.newColumn, move.newRow))
