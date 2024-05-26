@@ -115,4 +115,21 @@ public class CheckScanner {
         return piece != null & !board.sameTeam(piece, king);
     }
 
+    public boolean isGameOver(Piece king) {
+        for (Piece piece : board.pieceList) {
+            if(board.sameTeam(piece, king)) {
+                board.selectedPiece = piece == king ? king : null;
+                for (int row = 0; row < board.ROWS; row++) {
+                    for (int col = 0; col < board.COLUMNS; col ++) {
+                        Move move = new Move(board, piece, col, row);
+                        if(board.isValidMove(move)) {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
 }
