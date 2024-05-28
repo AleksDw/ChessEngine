@@ -6,7 +6,7 @@ public class CheckScanner {
 
     Board board;
 
-    public CheckScanner(Board board) {
+    CheckScanner(Board board) {
         this.board = board;
     }
 
@@ -111,7 +111,7 @@ public class CheckScanner {
         return check(piece, king) && piece.name.equals("Pawn") && !(piece.col == col && piece.row == row);
     }
 
-    boolean check(Piece piece,Piece king) {
+    private boolean check(Piece piece,Piece king) {
         return piece != null & !board.sameTeam(piece, king);
     }
 

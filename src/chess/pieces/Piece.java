@@ -17,7 +17,7 @@ public abstract class Piece {
     public String name;
     public boolean isFirstMove = true;
 
-    BufferedImage sheet;
+    protected BufferedImage sheet;
     {
         try {
             sheet = ImageIO.read(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("res/chessPieces.png")));
@@ -28,9 +28,9 @@ public abstract class Piece {
 
     protected int sheetScale = sheet.getWidth()/6;
 
-    Image sprite;
+    protected Image sprite;
 
-    Board board;
+    protected Board board;
 
     public Piece(Board board) {
         this.board = board;
@@ -38,8 +38,8 @@ public abstract class Piece {
 
     public abstract boolean isValidMovement(int col, int row);
 
-    public boolean isMoveOnBoard(int col, int row) {
-        return col < board.COLUMNS && row < board.ROWS;
+    protected boolean isMoveOnBoard(int col, int row) {
+        return col >= board.COLUMNS || row >= board.ROWS;
     }
 
 

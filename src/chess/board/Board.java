@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class Board extends JPanel {
 
-    public int tileSize = 80;
+    public final int TILE_SIZE = 80;
     public final int COLUMNS = 8;
     public final int ROWS = 8;
 
@@ -26,7 +26,7 @@ public class Board extends JPanel {
     private boolean isGameOver = false;
 
     public Board() {
-        this.setPreferredSize(new Dimension(COLUMNS * tileSize, ROWS * tileSize));
+        this.setPreferredSize(new Dimension(COLUMNS * TILE_SIZE, ROWS * TILE_SIZE));
         addPieces();
 
         this.addMouseListener(input);
@@ -48,7 +48,7 @@ public class Board extends JPanel {
     }
 
 
-    public void makeMove(Move move) {
+    void makeMove(Move move) {
 
         if(move.piece.name.equals("Pawn"))
             movePawn(move);
@@ -56,8 +56,8 @@ public class Board extends JPanel {
             moveKing(move);
         move.piece.col = move.newColumn;
         move.piece.row = move.newRow;
-        move.piece.xPos = move.newColumn * tileSize;
-        move.piece.yPos = move.newRow * tileSize;
+        move.piece.xPos = move.newColumn * TILE_SIZE;
+        move.piece.yPos = move.newRow * TILE_SIZE;
 
         move.piece.isFirstMove = false;
         capture(move.capture);
@@ -105,16 +105,16 @@ public class Board extends JPanel {
                 rook = getPiece(0, move.piece.row);
                 rook.col = 3;
             }
-            rook.xPos = rook.col * tileSize;
+            rook.xPos = rook.col * TILE_SIZE;
         }
     }
 
-    public void capture(Piece piece) {
+    private void capture(Piece piece) {
         pieceList.remove(piece);
     }
 
 
-    public boolean isValidMove(Move move) {
+    boolean isValidMove(Move move) {
 
         if (isGameOver){
             return false;
@@ -131,7 +131,7 @@ public class Board extends JPanel {
         return !checkScanner.isKingChecked(move);
     }
 
-    public boolean sameTeam(Piece p1, Piece p2) {
+    boolean sameTeam(Piece p1, Piece p2) {
         if(p1 == null || p2 == null) {
             return false;
         }
@@ -173,7 +173,7 @@ public class Board extends JPanel {
         return null;
     }
 
-    public void addPieces() {
+    private void addPieces() {
         pieceList.add(new Knight(this, 1, 0, false));
         pieceList.add(new Knight(this, 6, 0, false));
         pieceList.add(new Knight(this, 1, 7, true));
@@ -210,7 +210,7 @@ public class Board extends JPanel {
         for (int row = 0; row<ROWS; row++){
             for(int column = 0; column<COLUMNS; column++) {
                 g2d.setColor((column+row) % 2 == 0 ? Color.lightGray : Color.darkGray);
-                g2d.fillRect(column * tileSize, row * tileSize, tileSize, tileSize);
+                g2d.fillRect(column * TILE_SIZE, row * TILE_SIZE, TILE_SIZE, TILE_SIZE);
             }
         }
 
@@ -227,7 +227,7 @@ public class Board extends JPanel {
                     if (isValidMove(new Move(this, selectedPiece, column, row))) {
 
                         g2d.setColor(new Color(70, 180, 60, 200));
-                        g2d.fillOval((int) ((column+0.5-(dotSize/2)) * tileSize), (int) ((row+0.5-(dotSize/2)) * tileSize), (int) (dotSize*tileSize), (int) (dotSize*tileSize));
+                        g2d.fillOval((int) ((column+0.5-(dotSize/2)) * TILE_SIZE), (int) ((row+0.5-(dotSize/2)) * TILE_SIZE), (int) (dotSize* TILE_SIZE), (int) (dotSize* TILE_SIZE));
 
                     }
 

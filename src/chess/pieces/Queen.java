@@ -9,17 +9,17 @@ public class Queen extends Piece{
         super(board);
         this.col = col;
         this.row = row;
-        this.xPos = col * board.tileSize;
-        this.yPos = row * board.tileSize;
+        this.xPos = col * board.TILE_SIZE;
+        this.yPos = row * board.TILE_SIZE;
 
         this.isWhite = isWhite;
         this.name = "Queen";
 
-        this.sprite = sheet.getSubimage(1 * sheetScale, isWhite ? 0 : sheetScale, sheetScale, sheetScale).getScaledInstance(board.tileSize, board.tileSize, BufferedImage.SCALE_SMOOTH);
+        this.sprite = sheet.getSubimage(1 * sheetScale, isWhite ? 0 : sheetScale, sheetScale, sheetScale).getScaledInstance(board.TILE_SIZE, board.TILE_SIZE, BufferedImage.SCALE_SMOOTH);
     }
 
     public boolean isValidMovement(int col, int row) {
-        if (!isMoveOnBoard(col, row)) {
+        if (isMoveOnBoard(col, row)) {
             return false;
         }
         return this.col == col || this.row == row || Math.abs(this.col - col) == Math.abs(this.row - row);
