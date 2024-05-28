@@ -20,6 +20,9 @@ public class Rook extends Piece{
     }
 
     public boolean isValidMovement(int col, int row) {
+        if (!isMoveOnBoard(col, row)) {
+            return false;
+        }
         return this.col == col || this.row == row;
     }
 

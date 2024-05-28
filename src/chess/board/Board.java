@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 public class Board extends JPanel {
 
     public int tileSize = 80;
-    final int COLUMNS = 8;
-    final int ROWS = 8;
+    public final int COLUMNS = 8;
+    public final int ROWS = 8;
 
     ArrayList<Piece> pieceList = new ArrayList<>();
     public Piece selectedPiece;
@@ -43,6 +43,11 @@ public class Board extends JPanel {
         return null;
     }
 
+    public int getTileNum(int col, int row) {
+        return row * ROWS + col;
+    }
+
+
     public void makeMove(Move move) {
 
         if(move.piece.name.equals("Pawn"))
@@ -60,47 +65,6 @@ public class Board extends JPanel {
         isWhiteToMove = !isWhiteToMove;
 
         updateGameState();
-    }
-
-    private void updateGameState() {
-        Piece king = findKing(isWhiteToMove);
-        if(checkScanner.isGameOver(king)) {
-            if (checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
-                System.out.println(isWhiteToMove ? "Black wins" : "White wins");
-            } else {
-                System.out.println("Stalemate");
-            }
-            isGameOver = true;
-        } else if(isNotEnoughMaterial(true) && isNotEnoughMaterial(false)) {
-            System.out.println("Stalemate, not enough material");
-            isGameOver = true;
-        }
-    }
-
-    private void moveKing(Move move) {
-        if (Math.abs(move.piece.col- move.newColumn) == 2) {
-            Piece rook;
-            if(move.piece.col < move.newColumn) {
-                rook = getPiece(7, move.piece.row);
-                rook.col = 5;
-            }
-            else {
-                rook = getPiece(0, move.piece.row);
-                rook.col = 3;
-            }
-            rook.xPos = rook.col * tileSize;
-        }
-    }
-
-    private boolean isNotEnoughMaterial(boolean isWhite) {
-        ArrayList<String> names = pieceList.stream()
-                .filter(p -> p.isWhite == isWhite)
-                .map(p -> p.name)
-                .collect(Collectors.toCollection(ArrayList::new));
-        if(names.contains("Queen") || names.contains("Pawn") || names.contains("Rook")) {
-            return false;
-        }
-        return names.size() < 3;
     }
 
     private void movePawn(Move move) {
@@ -130,9 +94,25 @@ public class Board extends JPanel {
         capture(move.piece);
     }
 
+    private void moveKing(Move move) {
+        if (Math.abs(move.piece.col- move.newColumn) == 2) {
+            Piece rook;
+            if(move.piece.col < move.newColumn) {
+                rook = getPiece(7, move.piece.row);
+                rook.col = 5;
+            }
+            else {
+                rook = getPiece(0, move.piece.row);
+                rook.col = 3;
+            }
+            rook.xPos = rook.col * tileSize;
+        }
+    }
+
     public void capture(Piece piece) {
         pieceList.remove(piece);
     }
+
 
     public boolean isValidMove(Move move) {
 
@@ -148,9 +128,7 @@ public class Board extends JPanel {
             return false;
         if(move.piece.moveCollideWithPiece(move.newColumn, move.newRow))
             return false;
-        if (checkScanner.isKingChecked(move))
-            return false;
-        return true;
+        return !checkScanner.isKingChecked(move);
     }
 
     public boolean sameTeam(Piece p1, Piece p2) {
@@ -160,8 +138,30 @@ public class Board extends JPanel {
         return p1.isWhite == p2.isWhite;
     }
 
-    public int getTileNum(int col, int row) {
-        return row * ROWS + col;
+    private void updateGameState() {
+        Piece king = findKing(isWhiteToMove);
+        if(checkScanner.isGameOver(king)) {
+            if (checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
+                System.out.println(isWhiteToMove ? "Black wins" : "White wins");
+            } else {
+                System.out.println("Stalemate");
+            }
+            isGameOver = true;
+        } else if(isNotEnoughMaterial(true) && isNotEnoughMaterial(false)) {
+            System.out.println("Stalemate, not enough material");
+            isGameOver = true;
+        }
+    }
+
+    private boolean isNotEnoughMaterial(boolean isWhite) {
+        ArrayList<String> names = pieceList.stream()
+                .filter(p -> p.isWhite == isWhite)
+                .map(p -> p.name)
+                .collect(Collectors.toCollection(ArrayList::new));
+        if(names.contains("Queen") || names.contains("Pawn") || names.contains("Rook")) {
+            return false;
+        }
+        return names.size() < 3;
     }
 
     Piece findKing(boolean isWhite) {

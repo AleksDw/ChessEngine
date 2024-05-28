@@ -37,6 +37,12 @@ public abstract class Piece {
     }
 
     public abstract boolean isValidMovement(int col, int row);
+
+    public boolean isMoveOnBoard(int col, int row) {
+        return col < board.COLUMNS && row < board.ROWS;
+    }
+
+
     public abstract boolean moveCollideWithPiece(int col, int row);
 
     public void paint(Graphics2D g2d) {

@@ -20,6 +20,9 @@ public class Bishop extends Piece{
     }
 
     public boolean isValidMovement(int col, int row) {
+        if (!isMoveOnBoard(col, row)) {
+            return false;
+        }
         return Math.abs(this.col - col) == Math.abs(this.row - row);
     }
 

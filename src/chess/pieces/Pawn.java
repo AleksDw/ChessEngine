@@ -19,6 +19,11 @@ public class Pawn extends Piece{
     }
 
     public boolean isValidMovement(int col, int row) {
+
+        if (!isMoveOnBoard(col, row)) {
+            return false;
+        }
+
         int colorMove = isWhite ? 1 : -1; // if white move upwards, if black move downwards
 
         //push pawn on starting square
