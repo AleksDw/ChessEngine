@@ -142,13 +142,14 @@ public class Board extends JPanel {
         Piece king = findKing(isWhiteToMove);
         if(checkScanner.isGameOver(king)) {
             if (checkScanner.isKingChecked(new Move(this, king, king.col, king.row))) {
-                System.out.println(isWhiteToMove ? "Black wins" : "White wins");
+                JOptionPane.showMessageDialog(null, (isWhiteToMove ? "Black" : "White") + " wins!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
+
             } else {
-                System.out.println("Stalemate");
+                JOptionPane.showMessageDialog(null, "Stalemate", "Game Over", JOptionPane.INFORMATION_MESSAGE);
             }
             isGameOver = true;
         } else if(isNotEnoughMaterial(true) && isNotEnoughMaterial(false)) {
-            System.out.println("Stalemate, not enough material");
+            JOptionPane.showMessageDialog(null, "Stalemate, not enough material", "Game Over", JOptionPane.INFORMATION_MESSAGE);
             isGameOver = true;
         }
     }
